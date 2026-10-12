@@ -1,0 +1,41 @@
+name: Verificacion de proyecto Ionic
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verificar-proyecto:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verificar archivo del proyecto
+        run: |
+          test -f Practica.html
+          echo "Archivo encontrado correctamente"
+
+      - name: Verificar Ionic Framework
+        run: |
+          grep -qi "ionic" Practica.html
+          echo "Referencia a Ionic encontrada"
+
+      - name: Verificar estructuras de control
+        run: |
+          grep -Eq 'if[[:space:]]*\(' Practica.html
+          grep -Eq 'for[[:space:]]*\(' Practica.html
+          grep -Eq 'while[[:space:]]*\(' Practica.html
+          echo "Estructuras de control encontradas"
+
+      - name: Finalizar verificacion
+        run: echo "Verificacion automatica completada"
