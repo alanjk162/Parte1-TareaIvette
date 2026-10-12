@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Práctica de estructuras de control - Ionic</title>
+
+  <!-- Framework Ionic cargado desde su CDN oficial recomendado -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+  <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+
+  <style>
+    :root { --ion-color-primary: #4754c8; }
+    body { background: #f5f7ff; }
+    ion-content { --background: #f5f7ff; }
+    .contenedor { max-width: 650px; margin: 0 auto; padding-bottom: 32px; }
+    .introduccion { margin: 20px 14px 14px; line-height: 1.55; color: #42516d; }
+    .subtitulo { font-weight: 700; color: #2d3a58; margin: 20px 16px 6px; }
+    .detalle { color: #5e6e8c; font-size: 14px; line-height: 1.5; margin: 6px 16px 14px; }
+    .valor { font-weight: 700; color: #4754c8; }
+    .error { color: #b00020; font-size: 14px; margin: 12px 16px 0; min-height: 18px; }
+    .fila { padding: 4px 0; border-bottom: 1px solid #e8ebf4; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <ion-app>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Práctica con Ionic</ion-title>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <div class="contenedor">
+       
+
+        <ion-card>
+          <ion-card-header>
+            <ion-card-title>Calculadora de números</ion-card-title>
+            <ion-card-subtitle>Estructuras selectivas e iterativas</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content>
+            <ion-item>
+              <ion-input
+                id="numero"
+                type="number"
+                label="Escribe un número del 1 al 10"
+                label-placement="stacked"
+                placeholder="Ejemplo: 4"
+                min="1"
+                max="10"
+              ></ion-input>
+            </ion-item>
+            <ion-button id="calcular" expand="block" style="margin-top: 16px;">
+              Mostrar resultados
+            </ion-button>
+            <p id="error" class="error" role="alert"></p>
+          </ion-card-content>
+        </ion-card>
+
+        <section id="resultados" hidden aria-live="polite">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>1. Decisión: if / else</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+              <p>El número <span id="paridad" class="valor"></span>.</p>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>2. Repetición: for</ion-card-title>
+              <ion-card-subtitle>Tabla de multiplicar del 1 al 5</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <div id="tabla"></div>
+            </ion-card-content>
+          </ion-card>
+
+          <ion-card>
+            <ion-card-header>
+              <ion-card-title>3. Repetición: while</ion-card-title>
+              <ion-card-subtitle>Conteo desde 1 hasta el número</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <p id="conteo" class="valor"></p>
+            </ion-card-content>
+          </ion-card>
+        </section>
+      </div>
+    </ion-content>
+  </ion-app>
+
+  <script>
+    const campoNumero = document.getElementById('numero');
+    const boton = document.getElementById('calcular');
+    const error = document.getElementById('error');
+    const resultados = document.getElementById('resultados');
+
+    boton.addEventListener('click', function () {
+      const texto = String(campoNumero.value ?? '').trim();
+      const numero = Number(texto);
+
+      // Estructura selectiva: comprobar si el dato es válido.
+      if (texto === '' || !Number.isInteger(numero) || numero < 1 || numero > 10) {
+        error.textContent = 'Introduce un número entero entre 1 y 10.';
+        resultados.hidden = true;
+        return;
+      }
+      error.textContent = '';
+
+      // Estructura selectiva: decidir si el número es par o impar.
+      if (numero % 2 === 0) {
+        document.getElementById('paridad').textContent = numero + ' es par';
+      } else {
+        document.getElementById('paridad').textContent = numero + ' es impar';
+      }
+
+      // Estructura iterativa for: generar cinco multiplicaciones.
+      const tabla = document.getElementById('tabla');
+      tabla.replaceChildren();
+      for (let i = 1; i <= 5; i++) {
+        const fila = document.createElement('p');
+        fila.className = 'fila';
+        fila.textContent = `${numero} × ${i} = ${numero * i}`;
+        tabla.appendChild(fila);
+      }
+
+      // Estructura iterativa while: contar hasta el número.
+      const lista = [];
+      let contador = 1;
+      while (contador <= numero) {
+        lista.push(contador);
+        contador++;
+      }
+      document.getElementById('conteo').textContent = lista.join(', ');
+
+      resultados.hidden = false;
+    });
+  </script>
+</body>
+</html>
